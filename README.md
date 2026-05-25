@@ -81,7 +81,7 @@ Built as a portfolio project to demonstrate hands-on NOC, networking, and observ
 
 ```powershell
 # Clone
-git clone https://github.com/YOUR_USERNAME/network-observability-lab.git
+git clone https://github.com/MrN7King/network-observability-lab.git
 cd network-observability-lab
 
 # Wipe any old data (important for a clean first run)
