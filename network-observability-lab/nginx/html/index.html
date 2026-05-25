@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NOC Lab — DMZ Web Server</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Courier New',monospace;background:#0a0e1a;color:#00ff88;
+         display:flex;align-items:center;justify-content:center;min-height:100vh}
+    .terminal{border:1px solid #00ff88;padding:2rem 3rem;max-width:600px;width:90%;
+              box-shadow:0 0 30px rgba(0,255,136,.15)}
+    .prompt{color:#888;font-size:.8rem;margin-bottom:1rem}
+    h1{font-size:1.4rem;margin-bottom:.5rem}
+    .status{color:#00ccff;margin:1rem 0}
+    .info{color:#aaa;font-size:.85rem;line-height:1.8}
+    .tag{color:#ff6b6b}
+    .blink{animation:blink 1s step-end infinite}
+    @keyframes blink{50%{opacity:0}}
+  </style>
+</head>
+<body>
+  <div class="terminal">
+    <div class="prompt">root@web-dmz:~$ ./start_server.sh</div>
+    <h1>Network Observability Lab</h1>
+    <div class="status">✔ DMZ Web Server — ONLINE</div>
+    <div class="info">
+      Host: <span style="color:#00ff88">web-dmz</span><br>
+      IP: <span style="color:#00ff88">172.20.0.30</span><br>
+      Segment: <span style="color:#00ff88">DMZ (172.20.0.0/24)</span><br>
+      Monitoring: <span style="color:#00ff88">Prometheus + Blackbox HTTP probe</span><br>
+      Logs: <span style="color:#00ff88">Loki + Promtail</span>
+    </div>
+    <br>
+    <div class="info">
+      <span class="tag">[HTTP]</span> Monitored for uptime and response time.<br>
+      <span class="tag">[ICMP]</span> Reachability probed every 15 seconds.<br>
+      <span class="tag">[LOGS]</span> Every request shipped to Loki.
+    </div>
+    <br>
+    <div class="prompt"><span class="blink">█</span></div>
+  </div>
+</body>
+</html>

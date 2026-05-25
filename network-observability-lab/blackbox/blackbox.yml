@@ -1,0 +1,25 @@
+modules:
+
+  # ICMP ping — used for reachability checks
+  icmp:
+    prober: icmp
+    timeout: 5s
+    icmp:
+      preferred_ip_protocol: ip4
+      dont_fragment: false
+
+  # HTTP probe — useful if you later add an nginx demo container
+  http_2xx:
+    prober: http
+    timeout: 5s
+    http:
+      valid_http_versions: ["HTTP/1.1", "HTTP/2.0"]
+      valid_status_codes: []   # defaults to 2xx
+      method: GET
+      follow_redirects: true
+      preferred_ip_protocol: ip4
+
+  # TCP connect — generic port check
+  tcp_connect:
+    prober: tcp
+    timeout: 5s

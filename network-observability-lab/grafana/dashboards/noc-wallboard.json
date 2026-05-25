@@ -1,0 +1,129 @@
+{
+  "title": "NOC Wallboard",
+  "uid": "noc-wallboard-v2",
+  "tags": ["noc","wallboard","networking"],
+  "refresh": "10s",
+  "schemaVersion": 38,
+  "time": {"from": "now-30m","to": "now"},
+  "panels": [
+    {
+      "id": 1, "type": "row", "gridPos": {"h":1,"w":24,"x":0,"y":0},
+      "title": "NODE REACHABILITY — ICMP"
+    },
+    {
+      "id": 2, "type": "stat", "gridPos": {"h":5,"w":6,"x":0,"y":1},
+      "title": "core-router",
+      "datasource": {"type":"prometheus"},
+      "targets": [{"expr":"probe_success{node=\"core-router\"}","instant":true,"legendFormat":""}],
+      "fieldConfig": {"defaults": {"mappings":[{"type":"value","options":{"0":{"text":"DOWN","color":"red"},"1":{"text":"UP","color":"green"}}}],"thresholds":{"steps":[{"color":"red","value":null},{"color":"green","value":1}]},"color":{"mode":"thresholds"}}},
+      "options": {"reduceOptions":{"calcs":["lastNotNull"]},"colorMode":"background","textMode":"auto","justifyMode":"center"}
+    },
+    {
+      "id": 3, "type": "stat", "gridPos": {"h":5,"w":6,"x":6,"y":1},
+      "title": "edge-a",
+      "datasource": {"type":"prometheus"},
+      "targets": [{"expr":"probe_success{node=\"edge-a\"}","instant":true,"legendFormat":""}],
+      "fieldConfig": {"defaults": {"mappings":[{"type":"value","options":{"0":{"text":"DOWN","color":"red"},"1":{"text":"UP","color":"green"}}}],"thresholds":{"steps":[{"color":"red","value":null},{"color":"green","value":1}]},"color":{"mode":"thresholds"}}},
+      "options": {"reduceOptions":{"calcs":["lastNotNull"]},"colorMode":"background","textMode":"auto","justifyMode":"center"}
+    },
+    {
+      "id": 4, "type": "stat", "gridPos": {"h":5,"w":6,"x":12,"y":1},
+      "title": "edge-b",
+      "datasource": {"type":"prometheus"},
+      "targets": [{"expr":"probe_success{node=\"edge-b\"}","instant":true,"legendFormat":""}],
+      "fieldConfig": {"defaults": {"mappings":[{"type":"value","options":{"0":{"text":"DOWN","color":"red"},"1":{"text":"UP","color":"green"}}}],"thresholds":{"steps":[{"color":"red","value":null},{"color":"green","value":1}]},"color":{"mode":"thresholds"}}},
+      "options": {"reduceOptions":{"calcs":["lastNotNull"]},"colorMode":"background","textMode":"auto","justifyMode":"center"}
+    },
+    {
+      "id": 5, "type": "stat", "gridPos": {"h":5,"w":6,"x":18,"y":1},
+      "title": "dmz-host",
+      "datasource": {"type":"prometheus"},
+      "targets": [{"expr":"probe_success{node=\"dmz-host\"}","instant":true,"legendFormat":""}],
+      "fieldConfig": {"defaults": {"mappings":[{"type":"value","options":{"0":{"text":"DOWN","color":"red"},"1":{"text":"UP","color":"green"}}}],"thresholds":{"steps":[{"color":"red","value":null},{"color":"green","value":1}]},"color":{"mode":"thresholds"}}},
+      "options": {"reduceOptions":{"calcs":["lastNotNull"]},"colorMode":"background","textMode":"auto","justifyMode":"center"}
+    },
+    {
+      "id": 10, "type": "row", "gridPos": {"h":1,"w":24,"x":0,"y":6},
+      "title": "WEB SERVER — HTTP"
+    },
+    {
+      "id": 11, "type": "stat", "gridPos": {"h":5,"w":8,"x":0,"y":7},
+      "title": "web-dmz HTTP",
+      "datasource": {"type":"prometheus"},
+      "targets": [{"expr":"probe_success{job=\"http-probes\",node=\"web-dmz\"}","instant":true,"legendFormat":""}],
+      "fieldConfig": {"defaults": {"mappings":[{"type":"value","options":{"0":{"text":"DOWN","color":"red"},"1":{"text":"UP","color":"green"}}}],"thresholds":{"steps":[{"color":"red","value":null},{"color":"green","value":1}]},"color":{"mode":"thresholds"}}},
+      "options": {"reduceOptions":{"calcs":["lastNotNull"]},"colorMode":"background","textMode":"auto","justifyMode":"center"}
+    },
+    {
+      "id": 12, "type": "stat", "gridPos": {"h":5,"w":8,"x":8,"y":7},
+      "title": "HTTP Response Time",
+      "datasource": {"type":"prometheus"},
+      "targets": [{"expr":"probe_duration_seconds{job=\"http-probes\",node=\"web-dmz\"} * 1000","instant":true,"legendFormat":""}],
+      "fieldConfig": {"defaults": {"unit":"ms","thresholds":{"mode":"absolute","steps":[{"color":"green","value":null},{"color":"yellow","value":200},{"color":"red","value":1000}]},"color":{"mode":"thresholds"}}},
+      "options": {"reduceOptions":{"calcs":["lastNotNull"]},"colorMode":"background","textMode":"value_and_name","justifyMode":"center"}
+    },
+    {
+      "id": 13, "type": "timeseries", "gridPos": {"h":5,"w":8,"x":16,"y":7},
+      "title": "HTTP Response Time History",
+      "datasource": {"type":"prometheus"},
+      "targets": [{"expr":"probe_duration_seconds{job=\"http-probes\"} * 1000","legendFormat":"{{instance}}"}],
+      "fieldConfig": {"defaults":{"unit":"ms","color":{"mode":"palette-classic"},"custom":{"lineWidth":2,"fillOpacity":8}}}
+    },
+    {
+      "id": 20, "type": "row", "gridPos": {"h":1,"w":24,"x":0,"y":12},
+      "title": "ICMP LATENCY"
+    },
+    {
+      "id": 21, "type": "timeseries", "gridPos": {"h":7,"w":24,"x":0,"y":13},
+      "title": "ICMP Round-Trip Time (ms) — All Nodes",
+      "datasource": {"type":"prometheus"},
+      "targets": [
+        {"expr":"probe_duration_seconds{job=\"icmp-probes\",node=\"core-router\"} * 1000","legendFormat":"core-router"},
+        {"expr":"probe_duration_seconds{job=\"icmp-probes\",node=\"edge-a\"} * 1000","legendFormat":"edge-a"},
+        {"expr":"probe_duration_seconds{job=\"icmp-probes\",node=\"edge-b\"} * 1000","legendFormat":"edge-b"},
+        {"expr":"probe_duration_seconds{job=\"icmp-probes\",node=\"dmz-host\"} * 1000","legendFormat":"dmz-host"}
+      ],
+      "fieldConfig": {"defaults":{"unit":"ms","color":{"mode":"palette-classic"},"custom":{"lineWidth":2,"fillOpacity":10},"thresholds":{"mode":"absolute","steps":[{"color":"green","value":null},{"color":"yellow","value":50},{"color":"red","value":100}]}}}
+    },
+    {
+      "id": 30, "type": "row", "gridPos": {"h":1,"w":24,"x":0,"y":20},
+      "title": "INTERFACE TRAFFIC"
+    },
+    {
+      "id": 31, "type": "timeseries", "gridPos": {"h":7,"w":12,"x":0,"y":21},
+      "title": "Network RX (bytes/s)",
+      "datasource": {"type":"prometheus"},
+      "targets": [{"expr":"rate(node_network_receive_bytes_total{device!=\"lo\"}[1m])","legendFormat":"{{instance}} {{device}}"}],
+      "fieldConfig": {"defaults":{"unit":"Bps","color":{"mode":"palette-classic"},"custom":{"lineWidth":2,"fillOpacity":8}}}
+    },
+    {
+      "id": 32, "type": "timeseries", "gridPos": {"h":7,"w":12,"x":12,"y":21},
+      "title": "Network TX (bytes/s)",
+      "datasource": {"type":"prometheus"},
+      "targets": [{"expr":"rate(node_network_transmit_bytes_total{device!=\"lo\"}[1m])","legendFormat":"{{instance}} {{device}}"}],
+      "fieldConfig": {"defaults":{"unit":"Bps","color":{"mode":"palette-classic"},"custom":{"lineWidth":2,"fillOpacity":8}}}
+    },
+    {
+      "id": 40, "type": "row", "gridPos": {"h":1,"w":24,"x":0,"y":28},
+      "title": "ACTIVE ALERTS"
+    },
+    {
+      "id": 41, "type": "alertlist", "gridPos": {"h":7,"w":24,"x":0,"y":29},
+      "title": "Firing Alerts",
+      "options": {"stateFilter":{"firing":true,"pending":true,"error":true,"noData":false,"normal":false},"sortOrder":1,"maxItems":20,"groupMode":"default","groupBy":[]}
+    },
+    {
+      "id": 50, "type": "row", "gridPos": {"h":1,"w":24,"x":0,"y":36},
+      "title": "CONTAINER LOGS — Loki"
+    },
+    {
+      "id": 51, "type": "logs", "gridPos": {"h":8,"w":24,"x":0,"y":37},
+      "title": "All Container Logs",
+      "datasource": {"type":"loki","uid":"loki"},
+      "targets": [{"expr":"{service=~\".+\"}","legendFormat":""}],
+      "options": {"dedupStrategy":"none","enableLogDetails":true,"prettifyLogMessage":false,"showTime":true,"showLabels":true,"wrapLogMessage":false,"sortOrder":"Descending"}
+    }
+  ],
+  "templating": {"list":[]},
+  "annotations": {"list":[]}
+}

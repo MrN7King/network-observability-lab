@@ -1,0 +1,98 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ["172.99.0.8:9093"]
+
+rule_files:
+  - "alerts.yml"
+
+scrape_configs:
+
+  - job_name: "node-exporters"
+    static_configs:
+      - targets:
+          - "172.99.0.110:9100"
+          - "172.99.0.121:9100"
+          - "172.99.0.122:9100"
+          - "172.99.0.123:9100"
+    relabel_configs:
+      - source_labels: [__address__]
+        regex: "172.99.0.110:.*"
+        target_label: instance
+        replacement: core-router
+      - source_labels: [__address__]
+        regex: "172.99.0.121:.*"
+        target_label: instance
+        replacement: edge-a
+      - source_labels: [__address__]
+        regex: "172.99.0.122:.*"
+        target_label: instance
+        replacement: edge-b
+      - source_labels: [__address__]
+        regex: "172.99.0.123:.*"
+        target_label: instance
+        replacement: dmz-host
+
+  - job_name: "icmp-probes"
+    metrics_path: /probe
+    params:
+      module: [icmp]
+    static_configs:
+      - targets:
+          - "172.20.0.10"
+          - "172.20.0.21"
+          - "172.20.0.22"
+          - "172.20.0.23"
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: "172.99.0.200:9115"
+      - source_labels: [instance]
+        regex: "172.20.0.10"
+        target_label: node
+        replacement: core-router
+      - source_labels: [instance]
+        regex: "172.20.0.21"
+        target_label: node
+        replacement: edge-a
+      - source_labels: [instance]
+        regex: "172.20.0.22"
+        target_label: node
+        replacement: edge-b
+      - source_labels: [instance]
+        regex: "172.20.0.23"
+        target_label: node
+        replacement: dmz-host
+
+  - job_name: "http-probes"
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets:
+          - "http://172.20.0.30:80"
+          - "http://172.20.0.30:80/health"
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: "172.99.0.200:9115"
+      - target_label: node
+        replacement: web-dmz
+
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  - job_name: "alertmanager"
+    static_configs:
+      - targets: ["172.99.0.8:9093"]
