@@ -45,7 +45,7 @@ Built as a portfolio project to demonstrate hands-on NOC, networking, and observ
 ## Architecture
 
 ```
-   ![Network Architecture](./topology.png)
+   ![Network Architecture](./Topology.png)
 ```
 
 ---
