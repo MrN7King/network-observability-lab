@@ -44,9 +44,7 @@ Built as a portfolio project to demonstrate hands-on NOC, networking, and observ
 
 ## Architecture
 
-```
-   ![Network Architecture](./Topology.png)
-```
+![Network Architecture](https://raw.githubusercontent.com/MrN7King/network-observability-lab/main/Topology.png)
 
 ---
 
